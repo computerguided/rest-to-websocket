@@ -1,5 +1,6 @@
 import websockets
 import json
+import socket
 
 class APIHandler:
     def __init__(self, uri, token, message_handler):
@@ -26,3 +27,9 @@ class APIHandler:
             print(f"Connection rejected with status code: {e.status_code}")
         except websockets.ConnectionClosed as e:
             print(f"Connection closed: {e}")
+        except websockets.exceptions.InvalidURI as e:
+            print(f"Invalid URI: {e}")
+        except websockets.exceptions.WebSocketException as e:
+            print(f"WebSocket error: {e}")
+        except socket.gaierror as e:
+            print(f"Socket error: {e}")

@@ -59,7 +59,22 @@ After the command handlers have been defined, the message handler must be define
 def message_handler(message)
 ```
 
-The message handler implemented in this example is the same as was described in the documentation of the [`CommandHandler`](../doc/command_handler.md) class.
+The message is then parsed to extract the API, command name and parameters.
+
+```python
+api = message['api']
+command = message['command']
+parameters = message['parameters']
+```
+
+The command handler is then called with the command name and parameters.
+
+```python
+if api == "octoprintapi":
+    octo_print_handler.parse_command(command, **parameters)
+else:
+    print(f"Unknown API: {api}")
+```
 
 ## Main function
 

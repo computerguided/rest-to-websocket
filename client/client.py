@@ -6,9 +6,12 @@ from command_handler import CommandHandler
 # -----------------------------------------------------------------------------
 # OctoPrint API command handlers
 # -----------------------------------------------------------------------------
-octo_print_handler = CommandHandler("octoprintapi", {
+
+commands = {
     "startprint": ["filename", "temperature", "bedtemperature", "layerheight", "printspeed"]
-})
+}
+
+octo_print_handler = CommandHandler("octoprintapi", commands)
 
 # -----------------------------------------------------------------------------
 # Example message:
