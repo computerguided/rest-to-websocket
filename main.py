@@ -4,7 +4,13 @@ from typing import Dict
 import asyncio
 from asyncio import Lock
 import json
+import logging
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] [%(process)d] [%(levelname)s] %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S %z'
+)
 app = FastAPI()
 
 # WebSocket Connection Manager [doc/connection_manager.md]
@@ -17,11 +23,13 @@ class ConnectionManager:
         await websocket.accept()
         async with self.lock:
             self.active_connections[token] = websocket
+            logging.info(f"Connected to client with token: '{token}'")
 
     async def disconnect(self, token: str):
         async with self.lock:
             if token in self.active_connections:
                 del self.active_connections[token]
+                logging.info(f"Disconnected client with token: '{token}'")
 
     async def extract_bearer_token(self, request: Request) -> str:
         auth_header = request.headers.get("Authorization")
@@ -49,7 +57,7 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
     # Check if the token is already connected
     async with manager.lock:
         if token in manager.active_connections:
-            await websocket.close(code=1008, reason="Token already connected")
+            await websocket.close(code=1008, reason=f"Token {token} already connected")
             return
     await manager.connect(websocket, token)
     try:
@@ -63,20 +71,22 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
             except WebSocketDisconnect:
                 # Client disconnected
                 break
+            except RuntimeError as e:
+                # Handle the specific RuntimeError for disconnection
+                if str(e) == 'Cannot call "receive" once a disconnect message has been received.':
+                    break
+                else:
+                    raise
     finally:
         await manager.disconnect(token)
 
 # Common handler for POST endpoints [./doc/post_requests_handling.md]
-async def handle_post_request(request: Request, source: str, command: str):
+async def handle_post_request(request: Request, api: str, command: str):
     token = await manager.extract_bearer_token(request)
     if not token:
         return JSONResponse(status_code=401, content={"detail": "Unauthorized"})
-        
-    data = { 
-        "command": command,
-        "parameters": dict(request.query_params)
-    }
-    message = {"source": source, "data": data}
+    
+    message = {"api": api, "command": command, "parameters": dict(request.query_params)}
     message = json.dumps(message)
 
     try:

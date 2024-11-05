@@ -69,7 +69,8 @@ The HTTP POST request is converted to the following JSON format and then sent as
 ```json
 {
     "source": "<api>",
-    "data": { "command": "<command>", "parameters": { "<param1>": "<value1>", "<param2>": "<value2>" } }
+    "command": "<command>",
+    "parameters": [ {"<param1>": "<value1>"}, {"<param2>": "<value2>"} ]
 }
 ```
 
@@ -79,53 +80,34 @@ Where `<api>` is the API on which the command was received, `<command>` is the c
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "properties": 
-  {
-    "source": 
-    {
+  "properties": {
+    "api": {
       "type": "string",
-      "description": "API on which the command was received"
+      "description": "The API on which the command was received."
     },
-    "data": 
-    {
+    "command": {
+      "type": "string",
+      "description": "The command to execute."
+    },
+    "parameters": {
       "type": "object",
-      "properties": 
-      {
-        "command": 
-        {
-          "type": "string",
-          "description": "Command to execute"
-        },
-        "parameters":
-        {
-          "type": "array",
-          "description": "List of parameters for the command",
-          "items": 
+      "description": "An object containing key-value pairs as parameters for the command.",
+      "additionalProperties": {
+        "oneOf": [
           {
-            "type": "object",
-            "properties": 
-            {
-              "name":
-              {
-                "type": "string",
-                "description": "Parameter name"
-              },
-              "value":
-              {
-                "type": ["string", "number", "boolean"],
-                "description": "Parameter value"
-              }
-            },
-            "required": ["name", "value"],
-            "additionalProperties": false
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
           }
-        }
-      },
-      "required": ["command", "parameters"],
-      "additionalProperties": false
+        ]
+      }
     }
   },
-  "required": ["source", "data"],
+  "required": ["api", "command", "parameters"],
   "additionalProperties": false
 }
 ```
@@ -134,34 +116,16 @@ An illustrative example is shown below.
 
 ```json
 {
-  "source": "OctoPrintAPI",
-  "data": 
-  {
-    "command": "StartPrint",
-    "parameters": 
-    [
-      {
-        "name": "fileName",
-        "value": "test_print.gcode"
-      },
-      {
-        "name": "temperature",
-        "value": 200
-      },
-      {
-        "name": "bedTemperature",
-        "value": 60
-      },
-      {
-        "name": "layerHeight",
-        "value": 0.2
-      },
-      {
-        "name": "printSpeed",
-        "value": 100
-      }
-    ]
-  }
+  "api": "OctoPrintAPI",
+  "command": "StartPrint",
+  "parameters":
+   {
+      "fileName": "test_print.gcode",
+      "temperature": 200,
+      "bedTemperature": 60,
+      "layerHeight": 0.2,
+      "printSpeed": 100
+    }
 }
 ```
 
