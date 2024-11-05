@@ -30,7 +30,7 @@ octo_print_handler = CommandHandler("octoprintapi", {
 
 @octo_print_handler.startprint      
 def start_print_handler(filename, temperature, bedtemperature, layerheight, printspeed):
-    print(f"Received CS start print command: filename={filename}, temperature={temperature}, bedtemperature={bedtemperature}, layerheight={layerheight}, printspeed={printspeed}")
+    print(f"Received 'startprint' command: filename='{filename}', temperature={temperature}, bedtemperature={bedtemperature}, layerheight={layerheight}, printspeed={printspeed}")
 
 # -----------------------------------------------------------------------------
 # Message handler
