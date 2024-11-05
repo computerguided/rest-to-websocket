@@ -1,4 +1,4 @@
-# REST to WebSocket client  
+# REST-to-WebSocket Client  
 
 _The [`client.py`](client.py) file contains a simple script that connects to the REST-to-WebSocket WebApp and receives and processes forwarded commands from the CS and EV APIs._
 
@@ -31,7 +31,7 @@ import argparse
 The script is also going to use the `APIHandler` and `CommandHandler` classes, which are defined in the [`api_handler.py`](api_handler.md) and [`command_handler.py`](command_handler.md) files.
 
 ```python
-from octt_api_handler import OCTTAPIHandler
+from api_handler import APIHandler
 from command_handler import CommandHandler
 ```
 
