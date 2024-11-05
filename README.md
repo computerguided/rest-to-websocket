@@ -74,14 +74,73 @@ The HTTP POST request is converted to the following JSON format and then sent as
 }
 ```
 
-Where `<api>` is the API on which the command was received, `<command>` is the command to execute and `<parameters>` are the parameters of the command. An illustrative example is shown below.
+Where `<api>` is the API on which the command was received, `<command>` is the command to execute and `<parameters>` are the parameters of the command. The JSON schema is given below.
+
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": 
+  {
+    "source": 
+    {
+      "type": "string",
+      "description": "API on which the command was received"
+    },
+    "data": 
+    {
+      "type": "object",
+      "properties": 
+      {
+        "command": 
+        {
+          "type": "string",
+          "description": "Command to execute"
+        },
+        "parameters":
+        {
+          "type": "array",
+          "description": "List of parameters for the command",
+          "items": 
+          {
+            "type": "object",
+            "properties": 
+            {
+              "name":
+              {
+                "type": "string",
+                "description": "Parameter name"
+              },
+              "value":
+              {
+                "type": ["string", "number", "boolean"],
+                "description": "Parameter value"
+              }
+            },
+            "required": ["name", "value"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["command", "parameters"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["source", "data"],
+  "additionalProperties": false
+}
+```
+
+An illustrative example is shown below.
 
 ```json
 {
   "source": "OctoPrintAPI",
-  "data": {
+  "data": 
+  {
     "command": "StartPrint",
-    "parameters": [
+    "parameters": 
+    [
       {
         "name": "fileName",
         "value": "test_print.gcode"
@@ -109,7 +168,7 @@ Where `<api>` is the API on which the command was received, `<command>` is the c
 
 ## Multiplicity
 
-It must be possible for several "Local applications" to connect simultaneously to the WebApp. To distinguish between connected clients – and create some layer of security – the same bearer token is used that is configured in the "Local application" configuration.
+It must be possible for several local applications to connect simultaneously to the WebApp. To distinguish between connected clients – and create some layer of security – the same bearer token is used that is configured in the local application configuration.
 
 The bearer token will be used when connecting. As such the URL that is to be used by the client is then:
 
@@ -142,7 +201,7 @@ python3 -m venv rest_to_websocket_env
 source rest_to_websocket_env/bin/activate
 ```
 
-This will create a directory `rest_to_websocket_env` in the current directory. In the `.gitignore` file, "*env/" directories are already added to avoid committing it.
+This will create a directory `rest_to_websocket_env` in the current directory. In the `.gitignore` file, `*env/` directories are already added to avoid committing it.
 
 ### 4. Install the dependencies
 
