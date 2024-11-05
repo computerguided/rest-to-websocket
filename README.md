@@ -40,7 +40,7 @@ This means that the `base-url` must be accessible from the outside, e.g. like a 
 For the authentication, a bearer token is used. This token is configured in External application configuration by the user. It is added to the HTTP POST request as a unique bearer token in the "Authorization" header.
 
 There are two problems associated with this:
-* It might be difficult to obtain an IP address that is externally – i.e. publicly – accessible in an office IT infrastructure.
+* It might be difficult to obtain an IP address that is externally – i.e. publicly – accessible in an office IT infrastructure.<br><br>
 * Every local application will have a different IP address which needs to be changed in the external application configuration.
 
 ## Solution
@@ -53,8 +53,7 @@ Deploying an Azure Web App is a very effective approach to handle the issues men
 
 Here’s how this approach addresses each challenge:
 
-* External Accessibility: With an Azure WebApp, you have a publicly accessible endpoint that doesn’t rely on your office infrastructure, making it accessible from anywhere.
-<br>
+* External Accessibility: With an Azure WebApp, you have a publicly accessible endpoint that doesn’t rely on your office infrastructure, making it accessible from anywhere.<br><br>
 * Consistency Across Test Systems: You can deploy a single, stable URL for all test systems instead of using individual IP addresses. This setup would also simplify configuration management, as you only need to configure the URLs once rather than updating IP addresses per system.
 
 As such the REST to WebSocket WebApp converts the HTTP POST commands into JSON commands which are then forwarded to the connected Local application over the WebSocket.
@@ -273,12 +272,12 @@ A **WSGI (Web Server Gateway Interface) HTTP Server** is a type of server used t
 1. **WSGI (Web Server Gateway Interface):**
    - WSGI is a specification for how web servers and Python web applications should interact. It defines a simple interface that web servers use to forward requests to a Python application and receive responses back.
    - The purpose of WSGI is to ensure that web applications and frameworks in Python can be compatible with different web servers.
-   - A WSGI-compatible web server runs the application, processes incoming HTTP requests, and sends the response back to the client.
+   - A WSGI-compatible web server runs the application, processes incoming HTTP requests, and sends the response back to the client.<br><br>
 
 2. **WSGI HTTP Server:**
    - A WSGI HTTP server implements this interface and handles requests by passing them to the WSGI-compliant Python application.
    - The server waits for HTTP requests, processes them, and forwards them to the application for handling. After processing, the application sends a response, which the server sends back to the client (e.g., a browser).
-   - Popular examples of WSGI servers are **Gunicorn**, **uWSGI**, **Waitress**, and **mod_wsgi**.
+   - Popular examples of WSGI servers are **Gunicorn**, **uWSGI**, **Waitress**, and **mod_wsgi**.<br><br>
 
 3. **How It Works:**
    - A WSGI server, like Gunicorn or uWSGI, listens for incoming HTTP requests.
