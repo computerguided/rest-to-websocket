@@ -39,7 +39,8 @@ For authentication, a bearer token is used. This token is configured in the exte
 
 There are two key challenges with this approach:
 
-- Obtaining an IP address that is externally accessible can be challenging in an office IT infrastructure.<br><br>
+- Obtaining an IP address that is externally accessible can be challenging in an office IT infrastructure.
+
 - Each local application has a different IP address, requiring constant updates to the external application configuration.
 
 ## Solution
